@@ -1,11 +1,19 @@
-from pytube import YouTube  # Fix: Capital T in YouTube
+from pytube import YouTube
+from pytube.exceptions import VideoUnavailable
 
-video_url = input("Enter the URL of the YouTube video: ")
+video_url = input("Enter the URL of the YouTube video: ").strip()
 
-yt = YouTube(video_url)  # Fix: YouTube, not Youtube
+try:
+    yt = YouTube(video_url)
+    print(f"Video title: {yt.title}")
 
-stream = yt.streams.get_highest_resolution()
+    stream = yt.streams.get_highest_resolution()
+    print("Downloading...")
 
-stream.download()  # Fix: download, not dowload
+    stream.download()
+    print("Download completed!")
 
-print("Download completed!")  # Fix: spelling of 'download'
+except VideoUnavailable:
+    print("This video is unavailable or restricted.")
+except Exception as e:
+    print("An error occurred:", e)
